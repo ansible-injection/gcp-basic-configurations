@@ -1,7 +1,15 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Applies basic configurations onto provisioned compute instance(s) on GCP.
+
+- Add user as sudoer, 
+- ssh-key generation, 
+- package installations
+    - openjdk-8-jre
+    - openjdk-8-jdk-headless
+    - pdsh
+- mount and format disks 
 
 Requirements
 ------------
@@ -30,9 +38,9 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-BSD
+Apache-2.0
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+[tansudasli](github.com/tansudasli)
