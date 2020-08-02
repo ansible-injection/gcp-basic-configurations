@@ -1,2 +1,33 @@
 ---
 # defaults file for gcp-basic-configurations
+
+general:
+    project: sandbox-236618
+    region: europe-west4
+    auth_kind: serviceaccount
+    service_account_file: ~/.ssh/ansible.json
+scopes:
+    - https://www.googleapis.com/auth/compute
+
+packages: 
+    - openjdk-8-jre
+    - openjdk-8-jdk-headless
+    - pdsh
+      
+user: 
+    hadoop:                               #item.key
+        type: "rsa"                       #item.value.type
+        file: "/home/hadoop/.ssh/id_rsa"  #item.value.file
+        groups: "google-sudoers,adm"
+
+additional_disks:
+    data-disk: 
+        path: "/data"
+        device: "/dev/sdb"
+        fstype: "ext4"
+        owner: "hadoop"
+    log-disk: 
+        path: "/logs"
+        device: "/dev/sdc"
+        fstype: "ext4"
+        owner: "hadoop"

@@ -1,2 +1,70 @@
 ---
 # tasks file for gcp-basic-configurations
+
+- name: user - Add as sudoers, generate ssh-key
+  user:
+    name: "{{ item.key }}"
+    shell: /bin/bash
+    groups: "{{ item.value.groups }}"
+    append: yes
+    generate_ssh_key: yes
+    ssh_key_type: "{{ item.value.type }}"
+    ssh_key_file: .ssh/id_rsa
+    ssh_key_bits: 4096
+  with_dict: "{{ user }}"
+
+- name: ssh-key - get pub key contents
+  command: "cat {{ item.value.file }}.pub"
+  with_dict: "{{ user }}"  
+  register: pub_key 
+- name: ssh-key - copy into authorized-keys  
+  authorized_key:
+    user: "{{ item.key }}"
+    state: present
+    key: "{{ pub_key.results[0].stdout }}"
+  with_dict: "{{ user }}"
+   
+- name: Install packages
+  apt:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes
+
+
+- name: additional-disks - Format filesystem
+  filesystem:
+    fstype: "{{ item.value.fstype }}"
+    dev: "{{ item.value.device }}"
+  with_dict: "{{ additional_disks }}"
+- name: additional-disks - Mount and bind
+  mount:
+    path: "{{ item.value.path }}"
+    src: "{{ item.value.device }}"
+    state: mounted
+    fstype: "{{ item.value.fstype }}"
+  with_dict: "{{ additional_disks }}" 
+- name: additional-disks - Change ownership and group
+  file:
+    path: "{{ item.value.path }}"
+    state: directory
+    recurse: yes
+    owner: "{{ item.value.owner }}"
+    group: "{{ item.value.owner }}"
+  with_dict: "{{ additional_disks }}"  
+
+- name: Fix - Get JAVA_HOME path
+  command: /bin/bash -c "echo $(dirname $(dirname $(readlink -f $(which java))))"
+  register: java_home
+- name: Fix - Set JAVA_HOME path
+  lineinfile:
+    path: /etc/environment
+    regexp: '^JAVA_HOME='
+    line: JAVA_HOME="{{java_home.stdout}}"
+- name: Fix - Set default PDSH connection type as ssh
+  lineinfile:
+    path: /etc/environment
+    regexp: '^PDSH_RCMD_TYPE='
+    line: PDSH_RCMD_TYPE=ssh
+    
+- name: Fix - source environment
+  command: /bin/bash -c "source /etc/environment"
