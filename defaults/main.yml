@@ -17,7 +17,7 @@ packages:
 
 # machine-user details
 user:
-    xxx:                                  #username: Such as hadoop, elasticsearch etc.. Apply to other fields!
+    xxx:                                  #username: Apply to other fields!
         type: "rsa"                       #ssh-key
         file: "/home/xxx/.ssh/id_rsa"     #username!
         groups: "google-sudoers,adm"      #GCP sudo groups

@@ -59,7 +59,7 @@
   lineinfile:
     path: /etc/environment
     regexp: '^JAVA_HOME='
-    line: JAVA_HOME="{{java_home.stdout}}"
+    line: JAVA_HOME="{{ java_home.stdout }}"
 - name: Fix - Set default PDSH connection type as ssh
   lineinfile:
     path: /etc/environment
