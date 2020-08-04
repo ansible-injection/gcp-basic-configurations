@@ -3,37 +3,119 @@ Role Name
 
 Applies basic configurations onto provisioned compute instance(s) on GCP.
 
-- Add user as sudoer, 
-- ssh-key generation, 
-- package installations
+- Add a machine-user as sudoer, 
+- Generate ssh-key, 
+- Install packages
     - openjdk-8-jre
     - openjdk-8-jdk-headless
     - pdsh
-- mount and format disks 
+- Mount and Format disks 
+- Set environment vars
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Uses standard ssh, so nothing specific to GCP!
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+You should provide packages, if you need other fundamentals. You must provide valid user values
+
+defaults/main.yml
+```
+# GCP connection parameters
+general:
+    project: sandbox-236618                     #GCP project id
+    region: europe-west4
+    auth_kind: serviceaccount
+    service_account_file: ~/.ssh/ansible.json   #ansible service account file name
+scopes:
+    - https://www.googleapis.com/auth/compute
+
+# Fundamental Packages to install    
+packages: 
+    - openjdk-8-jre
+    - pdsh
+
+# machine-user details
+user:
+    xxx:                                  #username: Such as hadoop, elasticsearch etc.. Apply to other fields!
+        type: "rsa"                       #ssh-key
+        file: "/home/xxx/.ssh/id_rsa"     #username!
+        groups: "google-sudoers,adm"      #GCP sudo groups
+
+additional_disks:
+    data-disk: 
+        path: "/data"
+        device: "/dev/sdb"
+        fstype: "ext4"
+        owner: "xxx"                      #username!
+    log-disk: 
+        path: "/logs"
+        device: "/dev/sdc"
+        fstype: "ext4"
+        owner: "xxx"                      #username!
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- gcp_instances: to create instance(s) on GCP
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+[Click](https://github.com/ansible-injection/test-gcp-iaas-roles) to test and see example playbooks.
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+for configuration.yaml file:
+
+```
+- name: Fundamental Compute Instance Configurations
+  hosts: 
+    - all
+  become: yes
+  gather_facts: no
+
+  # vars:
+    # general:
+    #   project: sandbox-236618
+    #   region: europe-west4
+    #   auth_kind: serviceaccount
+    #   service_account_file: ~/.ssh/ansible.json
+    # scopes:
+    #   - https://www.googleapis.com/auth/compute
+
+    # packages: 
+    #     -                                     #Provide if you need other fundamental!! packages
+    #     - 
+    #     - 
+
+    # user: 
+    #     hadoop:                               #username: Provide valid value hadoop/elasticsearch ...
+    #         type: "rsa"                       #
+    #         file: "/home/hadoop/.ssh/id_rsa"  #Update w/ username
+    #         groups: "google-sudoers,adm"
+
+    # additional_disks:
+    #     data-disk: 
+    #         path: "/data"
+    #         device: "/dev/sdb"
+    #         fstype: "ext4"
+    #         owner: "hadoop"                   #Update w/ username
+    #     log-disk: 
+    #         path: "/logs"
+    #         device: "/dev/sdc"
+    #         fstype: "ext4"
+    #         owner: "hadoop"                   #Update w/ username
+
+
+  # tasks:
+  
+  roles:
+    #run w/ default var values
+    - role: tansudasli.gcp_basic_configurations 
+```
 
 License
 -------

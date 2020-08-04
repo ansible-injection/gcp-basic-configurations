@@ -1,33 +1,35 @@
 ---
 # defaults file for gcp-basic-configurations
 
+# GCP connection parameters
 general:
-    project: sandbox-236618
+    project: sandbox-236618                     #GCP project id
     region: europe-west4
     auth_kind: serviceaccount
-    service_account_file: ~/.ssh/ansible.json
+    service_account_file: ~/.ssh/ansible.json   #ansible service account file name
 scopes:
     - https://www.googleapis.com/auth/compute
 
+# Fundamental Packages to install    
 packages: 
     - openjdk-8-jre
-    - openjdk-8-jdk-headless
     - pdsh
-      
-user: 
-    hadoop:                               #item.key
-        type: "rsa"                       #item.value.type
-        file: "/home/hadoop/.ssh/id_rsa"  #item.value.file
-        groups: "google-sudoers,adm"
+
+# machine-user details
+user:
+    xxx:                                  #username: Such as hadoop, elasticsearch etc.. Apply to other fields!
+        type: "rsa"                       #ssh-key
+        file: "/home/xxx/.ssh/id_rsa"     #username!
+        groups: "google-sudoers,adm"      #GCP sudo groups
 
 additional_disks:
     data-disk: 
         path: "/data"
         device: "/dev/sdb"
         fstype: "ext4"
-        owner: "hadoop"
+        owner: "xxx"                      #username!
     log-disk: 
         path: "/logs"
         device: "/dev/sdc"
         fstype: "ext4"
-        owner: "hadoop"
+        owner: "xxx"                      #username!
