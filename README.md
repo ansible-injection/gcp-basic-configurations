@@ -18,7 +18,8 @@ Requirements
 Uses standard ssh, so nothing specific to GCP modules!
 
 - _ansible_ client
-- _ansible.cfg_ file and remoteuser and private key
+- _ansible.cfg_ file
+- _hosts_ file
 - gcp account
 
 Role Variables
@@ -71,6 +72,18 @@ Example Playbook
 ----------------
 
 [Click](https://github.com/ansible-injection/test-gcp-iaas-roles) to test and see example playbooks.
+
+hosts
+```
+# static inventory file
+
+# group w/ alias suh as hadoop/bigdata/ ....
+# Inspire from network Tags in GCP while host grouping
+# Update IPs
+# possible params: ansible_host=, ansible_user=, ansible_ssh_pass=, ansible_connection=ssh/winrm/localhost
+[web]
+standalone-node ansible_host=34.90.161.000
+```
 
 ansible.cfg
 ```
