@@ -109,14 +109,8 @@ configuration.yaml
   gather_facts: no
 
   # vars:
-    # general:
-    #   project: sandbox-236618
-    #   region: europe-west4
-    #   auth_kind: serviceaccount
-    #   service_account_file: ~/.ssh/ansible.json
-    # scopes:
-    #   - https://www.googleapis.com/auth/compute
 
+    # Installs openjdk-8-jre and pdsh at default
     # packages: 
     #     -                                     #Provide if you need other fundamental!! packages
     #     - 
