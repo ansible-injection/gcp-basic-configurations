@@ -2,13 +2,13 @@
 # defaults file for gcp-basic-configurations
 
 # GCP connection parameters
-general:
-    project: sandbox-236618                     #GCP project id
-    region: europe-west4
-    auth_kind: serviceaccount
-    service_account_file: ~/.ssh/ansible.json   #ansible service account file name
-scopes:
-    - https://www.googleapis.com/auth/compute
+# general:
+#     project: sandbox-236618                     #GCP project id
+#     region: europe-west4
+#     auth_kind: serviceaccount
+#     service_account_file: ~/.ssh/ansible.json   #ansible service account file name
+# scopes:
+#     - https://www.googleapis.com/auth/compute
 
 # Fundamental Packages to install    
 packages: 
