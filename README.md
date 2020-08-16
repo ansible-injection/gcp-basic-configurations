@@ -25,7 +25,9 @@ Uses standard ssh, so nothing specific to GCP modules!
 Role Variables
 --------------
 
-You should provide packages, if you need other fundamentals. You must provide valid user values
+You may provide additional packages, if you need other fundamental installations. And, You must provide valid user values for ownership etc.
+
+If you need other _product installations_ such as elastic etc., Please, use `gcp-basic-installations` role.
 
 defaults/main.yml
 ```
