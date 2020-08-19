@@ -110,38 +110,34 @@ configuration.yaml
   become: yes
   gather_facts: no
 
-  # vars:
-
-    # Installs openjdk-8-jre and pdsh at default
-    # packages: 
-    #     -                                     #Provide if you need other fundamental!! packages
-    #     - 
-    #     - 
-
-    # user: 
-    #     hadoop:                               #username: Provide valid value hadoop/elasticsearch ...
-    #         type: "rsa"                       #
-    #         file: "/home/hadoop/.ssh/id_rsa"  #Update w/ username
-    #         groups: "google-sudoers,adm"
-
-    # additional_disks:
-    #     data-disk: 
-    #         path: "/data"
-    #         device: "/dev/sdb"
-    #         fstype: "ext4"
-    #         owner: "hadoop"                   #Update w/ username
-    #     log-disk: 
-    #         path: "/logs"
-    #         device: "/dev/sdc"
-    #         fstype: "ext4"
-    #         owner: "hadoop"                   #Update w/ username
-
-
   # tasks:
   
   roles:
-    #run w/ default var values
+
     - role: tansudasli.gcp_basic_configurations 
+      packages: 
+        - openjdk-8-jre
+        - openjdk-8-jdk-headless
+        - pdsh
+
+      user: 
+          hadoop:                               #username: Such as hadoop, elasticsearch etc.. Apply to other 
+              type: "rsa"                       #
+              file: "/home/hadoop/.ssh/id_rsa"  #username!
+              groups: "google-sudoers,adm"
+
+      additional_disks:
+          data-disk: 
+              path: "/data"
+              device: "/dev/sdb"
+              fstype: "ext4"
+              owner: "hadoop"                   #username!
+          log-disk: 
+              path: "/logs"
+              device: "/dev/sdc"
+              fstype: "ext4"
+              owner: "hadoop"                   #username!
+
 ```
 
 License
